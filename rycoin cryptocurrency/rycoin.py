@@ -88,6 +88,37 @@ class Blockchain:
         # example: http://127.0.0.1.5000/ --> netloc --> 127.0.0.1.5000
         self.nodes.add(parsed_url.netloc)
         
+        
+    
+    # replaces the chain on the node which is being applied
+    # only takes in 'self' because each node will take in a specific version
+    # of the blockchain
+    # max_length is the length of the longest_chain
+    def replace_chain(self):
+        network = self.nodes
+        longest_chain = None
+        max_length = len(self.chain)
+        
+        # for all nodes in network, find the largest chain
+        # uses requests library to seek our specific response of get_chain
+        # and get the length of the chain in the specific node
+        # nodes are differentiated by their port (i.e. 127.0.0.1:5000, 5001, 5002, 5746)
+        # node could =  '127.0.0.1:5000 or whatever port it is
+        for nodes in network:
+            response = requests.get(f'http://{node}/get_chain')
+            # if found node and return success code, get chain data and check for longer chain
+            if response.status_code == 200:
+                length = response.json()['length']
+                chain = response.json()['chain']
+                # if length is greater than max_length and is valid, replace current chain as updated chain
+                if length > max_length and self.is_chain_valid(chain):
+                    max_length = length
+                    longest_chain = chain
+        # if longest_chain is not None, that means chain was replaced, we can place the chain and return true
+        if longest_chain:
+            self.chain = longest_chain
+            return True
+        return False
 
 # Part 2 - Mining our Blockchain
 
