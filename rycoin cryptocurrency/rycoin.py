@@ -23,6 +23,7 @@ class Blockchain:
         self.chain = []
         self.transactions = []
         self.create_block(proof = 1, previous_hash = '0')
+        self.nodes = set()
 
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
@@ -77,6 +78,16 @@ class Blockchain:
         # use the next block (+1) which can
         previous_block = self.get_previous_block()
         return previous_block['index'] + 1
+    
+    # adds the node containing the specified address to the set of nodes
+    def add_node(self, address):
+        # parse the address of the node
+        parsed_url = urlparse(address)
+        
+        # add node to network --> netloc is url and port 5000 we are using
+        # example: http://127.0.0.1.5000/ --> netloc --> 127.0.0.1.5000
+        self.nodes.add(parsed_url.netloc)
+        
 
 # Part 2 - Mining our Blockchain
 
