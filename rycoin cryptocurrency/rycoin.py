@@ -182,6 +182,27 @@ def add_transaction():
     
 
 # Part 3 - Decentralizing our Blockchain
+    
+# Connecting new nodes
+@app.route('/connect_node', methods = ['POST'])
+
+def connect_node():
+    json = request.get_json()
+    # way to register new node in .json file is by inputting 1 key which we call 'node'
+    # which is the address of the node
+    nodes = json.get('nodes')
+    # post http status code 400 for POST error if no nodes
+    if nodes is None:
+        return "No node", 400
+    
+    # if no error code, loop over nodes and add them one by one using add_node()
+    for node in nodes:
+        blockchain.add_node(node)
+    response = {'message': 'All the nodes are now connected. The Rycoin blockchain now contains the following nodes:',
+                'total_nodes': list(blockchain.nodes)}
+    return jsonify(response), 201
+    
+
 
 # Running the app
 app.run(host = '0.0.0.0', port = 5000)
