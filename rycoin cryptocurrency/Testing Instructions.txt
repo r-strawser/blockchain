@@ -1,0 +1,85 @@
+(1) In Spyder, create three separate consoles (i.e. 1/A, 2/A, 3/A)
+
+(2) Run rycoin_node_500X.py separately in each console. Each console being assigned one of the ports.
+
+(3) Open Postman --> create three new tabs for each of the consoles and run a get_chain to ensure they are up and running properly --> http://127.0.0.1:500X/get_chain
+
+(4) Make a POST request: In Postman --> Select "POST" on each of your three nodes.
+--> change each URL to connect_node (i.e. http://127.0.0.1:500X/connect_node
+--> Select "Body" --> "raw"
+--> Select dropdown "JSON"
+
+(5) Paste .json file: go to nodes.json file and paste the format into Postman. delete the node you are currently on for this part as you are trying to connect to the other nodes in the network.
+Example below of how should look for node 5001 connecting to other nodes in network.
+
+{
+    "nodes": ["http://127.0.0.1:5002",
+              "http://127.0.0.1:5003"]
+}
+
+--> click "Send" on node 5001 and should say all nodes are connected
+--> repeat steps for nodes 5002 and 5003
+
+
+** Now that all nodes are connected, we can test our CONSENSUS **
+
+if use GET request within node 5001 mine_block you will mine a block on that node. If you use get_chain on the other nodes though, they will not show the updated chain. so execute replace_node GET request on node 5002 and 5003 to update them now. 
+
+now can use add_transaction POST request with node 5001 and go to Postman and under "Body" --> "raw" and JSON selected, copy transaction.json file format and put into text field.
+We will send money from "person1" (node 5001) to "person2" (node 5002)...
+
+Should look like this:
+
+{
+    "sender": "person1",
+    "receiver": "person2",
+    "amount": 10000
+}
+
+** NOTE **
+- above in .json file should be public keys instead of actual names in real life implementation. Using names as keys here for simplicity
+
+Select "Send" and should output:
+
+{
+    "message": "This transaction will be added to Block 3"
+}
+
+... Block 3 because block index + 1 (next block)
+
+
+** Checkpoint **
+At this point, we have the transaction, but it has not yet been added to a block. So we need to mine a block first, to welcome this transaction to the blockchain
+
+In node 5001, use GET request to mine_block and will get output of first transaction and the new transaction of 10000 Rycoins from person1 to person2.
+Will look like this if directly following these directions:
+
+{
+    "index": 3,
+    "message": "Congratulations, you just mined a block!",
+    "previous_hash": "a85b875efac01590642879754be5d3ded02a8c5cd3b4f79cfdae468b9ac467af",
+    "proof": 45293,
+    "timestamp": "2020-10-14 14:08:53.591582",
+    "transactions": [
+        {
+            "amount": 10000,
+            "receiver": "person2",
+            "sender": "person1"
+        },
+        {
+            "amount": 1,
+            "receiver": "person1",
+            "sender": "693e4228e2e64710bd283610d001d506"
+        }
+    ]
+}
+
+** Checkpoint **
+If look at chain of node 5001 using the GET request get_chain, will notice chain has 3 nodes. 
+Will need to update other nodes 5002 and 5003 using GET request replace_chain which acts as our consensus.
+
+
+** Extra **
+Send yourself 100000 Rycoins from person1 or person2 to become intellectually rich. Of course don't forget to update the chain after.
+
+Message will say transaction will be added to Block 4. Then again, GET request mine_block on node 5001, then POST request replace_chain on nodes 5002 and 5003 to update them once more.
