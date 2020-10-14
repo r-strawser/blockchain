@@ -166,6 +166,21 @@ def is_valid():
         response = {'message': 'Houston, we have a problem. The Blockchain is not valid.'}
     return jsonify(response), 200
 
+# Adding a new transaction to the Blockchain
+@app.route('/add_transaction', methods = ['POST'])
+# gets information of transactions through json file posted in Postman
+def add_transaction():
+    json = request.get_json()
+    transaction_keys = ['sender', 'receiver', 'amount']
+    # check if all keys in transactions keys list are not in json file, return error msg
+    if not all (key in json for key in transaction_keys):
+        return 'Some elements of the transaction are missing', 400
+    # else get index of next block for transaction using add_transaction()
+    index = blockchain.add_transaction(json['sender'], json['receiver'], json['amount'])
+    response = {'message': f'This transaction will be added to Block {index}'}
+    return jsonify(response), 201
+    
+
 # Part 3 - Decentralizing our Blockchain
 
 # Running the app
