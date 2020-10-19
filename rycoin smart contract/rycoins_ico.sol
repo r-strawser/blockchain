@@ -36,5 +36,22 @@ contract rycoin_ico {
     function equity_USD(address investor) external constant returns (uint) {
         return equity_in_USD[investor];
     }
+	
+    // Buying Rycoins
+    // external since input variables are not intrinsic to the contract then apply modifier
+    // function to get the "Buy Rycoins" action in MyEtherWallet. Will not return anything
+    // arguments: address of investor (since investor calls to buy Rycoins)
+    //            amount of Rycoins they want to buy with USD
+    // modifies/updates three variables: equity_in_USD, equity_in_rycoins, total_rycoins_bought
+    function buy_rycoins(address investor, uint USD_invested) external can_buy_rycoins(USD_invested) {
+        uint rycoins_bought = USD_invested * USD_to_rycoins;
+        equity_in_rycoins[investor] +=  rycoins_bought;
+        
+        // divide by 1000 to get in USD 
+        equity_in_USD[investor] = equity_in_rycoins[investor] / 1000;
+        
+        // total Rycoins bought by all investors
+        total_rycoins_bought += rycoins_bought;
+    }
 
 }
