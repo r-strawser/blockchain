@@ -53,5 +53,17 @@ contract rycoin_ico {
         // total Rycoins bought by all investors
         total_rycoins_bought += rycoins_bought;
     }
+	
+	// Selling Rycoins 
+    function sell_rycoins(address investor, uint rycoins_sold) external {
+        // decrement rycoins being sold 
+        equity_in_rycoins[investor] -=  rycoins_sold;
+        
+        // divide by 1000 to get in USD 
+        equity_in_USD[investor] = equity_in_rycoins[investor] / 1000;
+        
+        // total Rycoins bought by all investors
+        total_rycoins_bought -= rycoins_sold;
+    }
 
 }
