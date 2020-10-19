@@ -1,0 +1,9 @@
+(1) Install Ganache
+- to deploy blockchain on... free alternative to Kubernetes 
+
+(2) Install MyEtherWallet (Version 
+https://github.com/MyEtherWallet/MyEtherWallet/releases/tag/v5.7.11
+- from github MyEtherWallet site: MyEtherWallet is a free, open-source, client-side tool for easily & securely interacting with the Ethereum network. As one of the leading providers of Ethereum services, MyEtherWallet equips users with an easy-to-understand and accessible suite of tools for their needs.
+
+(3) Create rycoin_ico.sol Solidity file using Remix
+https://remix.ethereum.org/
