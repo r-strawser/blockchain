@@ -14,6 +14,8 @@ contract rycoin_ico {
     // introducing the total number of Rycoins that have been bought by investors
     uint public total_rycoins_bought = 0;
     
-    // mapping from the investor address to it
+    // mapping from the investor address to its equity in Rycoins and USD 
+    mapping(address => uint) equity_in_rycoins;
+    mapping(address => uint) equity_in_USD;
     
 }
