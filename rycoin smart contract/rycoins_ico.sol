@@ -18,4 +18,11 @@ contract rycoin_ico {
     mapping(address => uint) equity_in_rycoins;
     mapping(address => uint) equity_in_USD;
     
+    // checking if an investor can buy Rycoins
+    // _; means that will only be satisfied if the modifier holds true
+    modifier can_buy_rycoins(uint USD_invested) {
+        require (USD_invested * USD_to_rycoins + total_rycoins_bought <= max_rycoins);
+        _;
+    }
+
 }
