@@ -24,5 +24,17 @@ contract rycoin_ico {
         require (USD_invested * USD_to_rycoins + total_rycoins_bought <= max_rycoins);
         _;
     }
+	
+	// getting the equity in Rycoins of an investor
+    // working the mapping so it can work within MyEtherWallet
+    function equity_rycoins(address investor) external constant returns (uint) {
+        return equity_in_rycoins[investor];
+    }
+    
+    // getting the equity in USD of an investor
+    // working the mapping so it can work within MyEtherWallet
+    function equity_USD(address investor) external constant returns (uint) {
+        return equity_in_USD[investor];
+    }
 
 }
